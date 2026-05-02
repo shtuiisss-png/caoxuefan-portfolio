@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="42%" r="70%">
+      <stop offset="0%" stop-color="#F7F1E7"/>
+      <stop offset="55%" stop-color="#E9DCC7"/>
+      <stop offset="100%" stop-color="#C9B184"/>
+    </radialGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 0.13"/></feComponentTransfer>
+      <feBlend mode="multiply" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <rect width="1400" height="900" fill="url(#g)"/>
+  <g filter="url(#grain)"><rect width="1400" height="900" fill="#000000" opacity=".08"/></g>
+  <rect x="70" y="70" width="230" height="50" rx="0" fill="#4E473C" opacity=".92"/>
+  <text x="95" y="103" font-family="Arial, sans-serif" font-size="20" letter-spacing="8" fill="#F8F2E8">ANIMATION</text>
+  <text x="700" y="445" text-anchor="middle" font-family="Georgia, serif" font-size="54" fill="#6E5E4E" opacity=".48" font-style="italic">Meet Cute</text>
+  <text x="700" y="515" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" letter-spacing="8" fill="#8E6B27" opacity=".65">replace with your project image</text>
+</svg>
