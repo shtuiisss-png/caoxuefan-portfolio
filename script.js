@@ -469,23 +469,20 @@ function renderAbout() {
 
 function projectMedia(project) {
   if (project.videoType === "youtube") {
-    let youtubeSrc = "";
-
-    if (project.youtubeId) {
-      youtubeSrc = `https://www.youtube.com/embed/${project.youtubeId}?rel=0&modestbranding=1`;
-    } else if (project.video) {
-      youtubeSrc = project.video;
+    let youtubeId = project.youtubeId;
+  
+    if (!youtubeId && project.video) {
+      const match = project.video.match(/embed\/([^?&]+)/);
+      youtubeId = match ? match[1] : "";
     }
-
+  
+    const poster = project.cover || `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+  
     return `
-      <iframe
-        src="${youtubeSrc}"
-        title="${project.title} video"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen>
-      </iframe>
+      <div class="youtube-lite" data-youtube-id="${youtubeId}">
+        <img src="${poster}" alt="${project.title} video cover">
+        <button class="youtube-play" aria-label="Play video">▶</button>
+      </div>
     `;
   }
 
@@ -676,6 +673,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".menu-toggle").addEventListener("click", () => {
     const nav = document.querySelector(".top-nav");
     const isOpen = nav.classList.toggle("open");
+    document.body.classList.toggle("menu-open", isOpen);
     document.querySelector(".menu-toggle").setAttribute("aria-expanded", String(isOpen));
   });
 
@@ -693,6 +691,7 @@ window.addEventListener("scroll", () => {
 
 let currentImageIndex = 0;
 let currentProject = null;
+const preloadedGalleryImages = new Set();
 let thumbnailsRendered = false;
 
 function renderGallery() {
@@ -712,6 +711,7 @@ function renderGallery() {
   }
 
   gallerySection.style.display = "block";
+  
 
   const image = document.getElementById("galleryImage");
 
@@ -777,6 +777,30 @@ function goToImage(index) {
   renderGallery();
 }
 
+function preloadCurrentAndNextGalleryImage() {
+  if (!currentProject || !currentProject.images || currentProject.images.length === 0) return;
+
+  const images = currentProject.images;
+  const total = images.length;
+
+  const indexes = [
+    currentImageIndex,
+    (currentImageIndex + 1) % total
+  ];
+
+  indexes.forEach(index => {
+    const item = images[index];
+    const src = item.src || item;
+
+    if (!src || preloadedGalleryImages.has(src)) return;
+
+    const img = new Image();
+    img.src = src;
+
+    preloadedGalleryImages.add(src);
+  });
+}
+
 function initLightbox() {
   const triggers = document.querySelectorAll(".lightbox-trigger");
 
@@ -809,3 +833,22 @@ function initLightbox() {
     });
   });
 }
+
+document.addEventListener("click", function (e) {
+  const youtubeBox = e.target.closest(".youtube-lite");
+
+  if (!youtubeBox) return;
+
+  const youtubeId = youtubeBox.dataset.youtubeId;
+
+  youtubeBox.innerHTML = `
+  <iframe
+    src="https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1&vq=hd1080"
+    title="YouTube video player"
+    frameborder="0"
+    allow="autoplay; encrypted-media; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+  `;
+});

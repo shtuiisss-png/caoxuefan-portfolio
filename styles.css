@@ -170,30 +170,26 @@ img, video, iframe { max-width: 100%; display: block; }
 /* ---------------- HOME HERO ---------------- */
 
 .hero {
-  min-height: calc(100vh - var(--nav-height));
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: visible;
+  display: block;
+  overflow: hidden;
   border-bottom: 1px solid var(--line);
   padding: 0;
+  background: transparent;
 }
 
 .hero-video-wrap {
-  position: absolute;
-  inset: 0;
+  position: relative;
   width: 100%;
-  height: 100%;
+  height: auto;
   overflow: hidden;
-  background: none;
+  background: transparent;
   z-index: 0;
 }
 
 .hero-video-wrap video {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: contain;
   opacity: 1;
   filter: none;
@@ -272,12 +268,12 @@ img, video, iframe { max-width: 100%; display: block; }
 }
 
 .scroll-hint {
-  position: absolute;
-  left: 50%;
-  bottom: -24px;
-  transform: translateX(-50%);
+  position: relative;
+  left: auto;
+  bottom: auto;
+  transform: none;
   z-index: 2;
-  margin: 0;
+  margin: 12px auto 24px;
   text-align: center;
   font-family: Inter, system-ui, sans-serif;
   letter-spacing: .25em;
@@ -1107,4 +1103,79 @@ img, video, iframe { max-width: 100%; display: block; }
   transform: translateY(-2px);
   background: var(--rust);
   color: #fff;
+}
+
+@media (max-width: 768px) {
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  .top-nav.open {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 90px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    padding: 32px 24px 80px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    background: rgba(239, 230, 214, 0.92);
+    backdrop-filter: blur(10px);
+    z-index: 999;
+  }
+
+  .top-nav.open .nav-group {
+    width: 100%;
+    margin-bottom: 28px;
+  }
+
+  .top-nav.open a {
+    display: block;
+    width: 100%;
+    padding: 14px 0;
+  }
+}
+
+.youtube-lite {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.youtube-lite img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.youtube-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.65);
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+.youtube-lite iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
 }
